@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -176,6 +177,14 @@ class EventController extends Controller
 
     public function getFutureEventsWithWorkshops()
     {
-        throw new \Exception('Implement task#2');
+        $eventIds = DB::table('workshops')
+            ->select('event_id')
+            ->groupBy('event_id')
+            ->havingRaw('MIN(start) > ?', [now()])
+            ->pluck('event_id');
+
+        return Event::with('workshops')
+            ->whereIn('id', $eventIds)
+            ->get();
     }
 }
