@@ -98,7 +98,7 @@ class EventController extends Controller
 
     public function getEventsWithWorkshops()
     {
-        throw new \Exception('Implement task#1');
+        return Event::with('workshops')->get();
     }
 
     /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
